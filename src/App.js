@@ -1,25 +1,34 @@
-import logo from './logo.svg';
+import { useState,useEffect } from 'react';
+import {Route,Routes} from 'react-router-dom'
 import './App.css';
+import {Pokemon} from './components/Pokemon';
+import{AllPokemons} from './components/AllPocemons'
+
 
 function App() {
+  
+  const [pokemonBase,setPokemonBase] = useState([]);
+  
+
+  let url = `https://pokeapi.co/api/v2/pokemon/?offset=0&limit=150`;
+
+useEffect(()=>{
+  fetch(url).then(elem => elem.json()).then(elem => setPokemonBase(elem.results)).catch(er=> console.log('sdvadfgsdfgdfgsdfgfgfsdgfsdg' , er));
+  
+},[url]);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div className="appContainer">
+      <h1>Каталог покемонов</h1>
+
+      <Routes>
+        <Route path='/' element = {<AllPokemons pokemons = {pokemonBase}/>}/>
+        <Route path='/:id' element = {<Pokemon pokemon = {pokemonBase}/>}/>
+     </Routes>
     </div>
-  );
+  )
 }
 
 export default App;
